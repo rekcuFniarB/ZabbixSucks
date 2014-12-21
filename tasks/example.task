@@ -1,0 +1,9 @@
+## Example task. Make it executable to enable.
+. "$SELF"
+
+URL='https://example.com'
+DOMAIN='example.com' ## Optional if you want traceroute and ping
+THRESHOLD=500 ## Optional, 500ms by default. Used to test response delay.
+USERAGENT='Sites Monitor' ## Optional
+
+fn_test_site
