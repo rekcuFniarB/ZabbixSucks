@@ -25,6 +25,29 @@ where `-tasks` directory of `.task` files. `-pagegen` arg is optional, creates a
 
 When `sendmail` is available, alerts will be sent to local user under which this job was run.
 
+### Command line options
+
+`-statsdir path`
+
+Directory where to store stats. If ommited, `/tmp` will be used.
+
+`-tasks`
+
+Directory where tasks are stored. If ommited, will use /etc/monitorsites.
+
+`-pagegen [page_file_path]`
+
+Generate HTML page with stats. If no path specified, will store as 'index.html' in stats directory.
+
+`-onalert command`
+
+Invoke specified command on alert. Alert message will be piped to command's stdin.
+
+`-help`
+
+Print this help.
+
+
 ### Special task example
 
 ```bash

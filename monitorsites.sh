@@ -8,13 +8,16 @@ USAGE="Monitor sites. This script is supposed to run from cron.
 
 USAGE
     -statsdir path
-        Directory where to store stats. If ommited, will try to use '/run/user/ID/monitorsites' or '/dev/shm/monitorsites'.
+        Directory where to store stats. If ommited, /tmp will be used.
     
     -tasks
         Directory where tasks are stored. If ommited, will use /etc/monitorsites.
     
     -pagegen [page_file_path]
         Generate HTML page with stats. If no path specified, will store as 'index.html' in stats directory.
+    
+    -onalert command
+        Invoke specified command on alert. Alert message will be piped to command's stdin.
     
     -help
         Print this help.
@@ -60,15 +63,21 @@ Content-transfer-encoding: 8bit
 } # fn_sendmail()
 
 ## send email or just print
+## @param file
 fn_notify () {
     if [ -n "$(which sendmail)" ]; then
         ## send email directly
-        echo "Subject: $MAIL_SUBJ
-
-$@" | fn_sendmail
+        {
+            echo "Subject: $MAIL_SUBJ\n\n"
+            cat "$1"
+        } | fn_sendmail
     else
         ## Just print to stderr
-        errlog "$@"
+        cat "$1" 1>&2
+    fi
+    
+    if [ -n "$_arg_onalert" -a -x "$_arg_onalert" ]; then
+        cat "$1" | "$_arg_onalert"
     fi
 } ## fn_notify()
 
@@ -152,7 +161,7 @@ fn_test_site() {
     fi
     
     ## If above request failed, test domain to print in logs
-    if [ ! $STATUS -eq 0 ] && [ -n "$DOMAIN" ]; then
+    if [ $STATUS -gt 0 ] && [ -n "$DOMAIN" ]; then
         timeout 10 ping -c 3 $DOMAIN 1>&2
         errlog
         timeout 10 traceroute $DOMAIN 1>&2
@@ -317,12 +326,14 @@ if [ _"$BASENAME" = _'monitorsites' -o _"$BASENAME" = _'monitorsites.sh' ]; then
         $REPORT
         "
         
+        echo -n "$REPORT" > "$STATSDIR/REPORT.txt"
+        
         ## send notification if status changed
         if [ -n "$STATUS_CHANGED" ]; then
-            fn_notify "$REPORT"
+            fn_notify "$STATSDIR/REPORT.txt"
         fi
         
-        echo -n "$REPORT" > "$STATSDIR/REPORT.txt"
+        
     fi
 
     ### Generate HTML page
