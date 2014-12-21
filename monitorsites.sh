@@ -30,6 +30,14 @@ errlog () {
     echo "$@" 1>&2
 }
 
+for util in sed grep wget; do
+    if [ -z "$(which "$util")" ]; then
+        errlog "ERROR: required '$util' not found."
+        exit 1
+    fi
+done
+
+
 ## sendmail wrapper to add some headers
 fn_sendmail() {
     local MAILNAME MESSAGE X_HEADERS HEADERS_DONE LINE
