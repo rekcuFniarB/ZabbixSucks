@@ -1,0 +1,3 @@
+## Monitor Sites
+*/5 * *   *   *     nice -n 19 monitorsites -tasks /opt/scripts/MonitorSites/tasks -pagegen /var/www/stats/index.html
+
