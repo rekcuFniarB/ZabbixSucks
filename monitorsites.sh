@@ -25,7 +25,7 @@ USAGE
 EXAMPLE
     $BASENAME -statsdir /var/log/sitesmonitor -tasks /etc/monitorsites/tasks -pagegen /var/www/stats/index.html
 
-Written by BrainFucker."
+https://github.com/rekcuFniarB/ZabbixSucks#readme"
 
 PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 
@@ -130,7 +130,7 @@ fn_test_site() {
     fi
     
     if [ -z "$USERAGENT" ]; then
-        USERAGENT='Sites monitor'
+        USERAGENT='Sites monitor +https://github.com/rekcuFniarB/ZabbixSucks#readme'
     fi
     
     START=$(date '+%s%N')

@@ -1,6 +1,8 @@
 Simple sites availability monitoring util
 =========================================
 
+https://github.com/rekcuFniarB/ZabbixSucks#readme
+
 Usage
 -----
 
